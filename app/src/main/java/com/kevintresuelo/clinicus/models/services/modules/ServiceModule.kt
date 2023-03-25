@@ -1,13 +1,13 @@
 package com.kevintresuelo.lorem.models.services.modules
 
-import com.kevintresuelo.lorem.models.services.ConfigurationService
-import com.kevintresuelo.lorem.models.services.ContextService
-import com.kevintresuelo.lorem.models.services.LogService
-import com.kevintresuelo.lorem.models.services.StorageService
+import com.kevintresuelo.clinicus.models.services.ConfigurationService
+import com.kevintresuelo.clinicus.models.services.ContextService
+import com.kevintresuelo.clinicus.models.services.LogService
+import com.kevintresuelo.clinicus.models.services.StorageService
 import com.kevintresuelo.clinicus.models.services.impl.ConfigurationServiceImpl
-import com.kevintresuelo.lorem.models.services.impl.ContextServiceImpl
-import com.kevintresuelo.lorem.models.services.impl.LogServiceImpl
-import com.kevintresuelo.lorem.models.services.impl.StorageServiceImpl
+import com.kevintresuelo.clinicus.models.services.impl.ContextServiceImpl
+import com.kevintresuelo.clinicus.models.services.impl.LogServiceImpl
+import com.kevintresuelo.clinicus.models.services.impl.StorageServiceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

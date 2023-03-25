@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kevintresuelo.clinicus.components.snackbar.SnackbarManager
 import com.kevintresuelo.clinicus.components.snackbar.SnackbarMessage.Companion.toSnackbarMessage
-import com.kevintresuelo.lorem.models.services.LogService
+import com.kevintresuelo.clinicus.models.services.LogService
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.kevintresuelo.lorem.models.services
+package com.kevintresuelo.clinicus.models.services
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -10,11 +10,11 @@ import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.kevintresuelo.lorem.MainActivity
-import com.kevintresuelo.lorem.R
-import com.kevintresuelo.lorem.models.Device
-import com.kevintresuelo.lorem.utils.*
-import com.kevintresuelo.lorem.utils.notifications.NotificationChannels
+import com.kevintresuelo.clinicus.MainActivity
+import com.kevintresuelo.clinicus.R
+import com.kevintresuelo.clinicus.models.Device
+import com.kevintresuelo.clinicus.utils.*
+import com.kevintresuelo.clinicus.utils.notifications.NotificationChannels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -95,7 +95,7 @@ class PushNotificationService: FirebaseMessagingService() {
         val channelId = NotificationChannels.CHANNEL_DEFAULT
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_visio_notification)
+            .setSmallIcon(android.R.drawable.stat_sys_data_bluetooth)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
@@ -136,7 +136,7 @@ class PushNotificationService: FirebaseMessagingService() {
         val channelId = NotificationChannels.CHANNEL_UPDATES
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_visio_update_notification)
+            .setSmallIcon(android.R.drawable.stat_sys_data_bluetooth)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)

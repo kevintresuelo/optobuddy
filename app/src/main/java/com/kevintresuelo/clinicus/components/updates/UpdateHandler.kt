@@ -7,12 +7,12 @@ import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.kevintresuelo.lorem.BuildConfig
+import com.kevintresuelo.clinicus.BuildConfig
 import com.kevintresuelo.clinicus.components.snackbar.SnackbarManager
 import com.kevintresuelo.clinicus.utils.ext.findActivity
 import java.math.BigDecimal
 import java.math.RoundingMode
-import com.kevintresuelo.lorem.R.string as AppStrings
+import com.kevintresuelo.clinicus.R.string as AppStrings
 
 class UpdateHandler(private val context: Context) {
 

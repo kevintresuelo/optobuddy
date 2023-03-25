@@ -6,15 +6,14 @@ import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.kevintresuelo.clinicus.SPLASH_SCREEN
-import com.kevintresuelo.clinicus.components.snackbar.SnackbarManager
 import com.kevintresuelo.clinicus.models.Device
 import com.kevintresuelo.clinicus.ui.screens.ClinicusViewModel
 import com.kevintresuelo.clinicus.utils.*
-import com.kevintresuelo.lorem.models.services.ConfigurationService
-import com.kevintresuelo.lorem.models.services.ContextService
-import com.kevintresuelo.lorem.models.services.LogService
-import com.kevintresuelo.lorem.models.services.StorageService
+import com.kevintresuelo.clinicus.models.services.ConfigurationService
+import com.kevintresuelo.clinicus.models.services.ContextService
+import com.kevintresuelo.clinicus.models.services.LogService
+import com.kevintresuelo.clinicus.models.services.StorageService
+import com.kevintresuelo.clinicus.utils.notifications.NotificationChannels
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.kevintresuelo.clinicus.R.string as AppStrings
@@ -57,26 +56,6 @@ class SplashViewModel @Inject constructor(
                         )
                     )
                 }
-            }
-        }
-
-        launchCatching {
-            contextService.getApplicationContext().readString(DataStore.PreferenceKeys.PATIENT_UID).collect {
-                patientUid = it
-
-                if(it.isNotBlank()) {
-                    syncWithServer(it)
-                }
-
-                doneLoadingPatient = true
-            }
-        }
-
-        launchCatching {
-            contextService.getApplicationContext().readBool(DataStore.PreferenceKeys.HAS_FINISHED_ONBOARDING).collect {
-                hasFinishedOnboarding = it
-
-                doneLoadingOnboarding = true
             }
         }
 

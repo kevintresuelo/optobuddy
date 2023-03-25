@@ -4,8 +4,8 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.kevintresuelo.clinicus.BuildConfig
-import com.kevintresuelo.lorem.models.services.ConfigurationService
-import com.kevintresuelo.lorem.models.services.trace
+import com.kevintresuelo.clinicus.models.services.ConfigurationService
+import com.kevintresuelo.clinicus.models.services.trace
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import com.kevintresuelo.clinicus.R.xml as AppConfig

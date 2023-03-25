@@ -1,4 +1,18 @@
 <resources>
+    <string name="notification_channel_default_name" translatable="false">General</string>
+    <string name="notification_channel_default_description" translatable="false">Other related notifications</string>
+    <string name="notification_channel_updates_name" translatable="false">Updates</string>
+    <string name="notification_channel_updates_description" translatable="false">Get notified on new releases</string>
+    <string name="notification_channel_exercises_name" translatable="false">Exercises</string>
+    <string name="notification_channel_exercises_description" translatable="false">Reminds you to perform your exercises</string>
+
     <string name="app_name">OptoBuddy</string>
     <string name="generic_error">Something wrong happened. Please try again.</string>
+
+    <!-- In-app Updates -->
+    <string name="update_downloading">Downloading update&#8230;</string>
+    <string name="update_downloaded">Update is ready to be installed.</string>
+    <string name="update_failed">An error occurred while updating. Please update the app via Google Play instead.</string>
+    <string name="update_canceled">Updating was cancelled. You may update the app via Google Play instead.</string>
+    <string name="update_restart">Install</string>
 </resources>

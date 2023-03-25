@@ -1,4 +1,4 @@
-package com.kevintresuelo.lorem.models.services
+package com.kevintresuelo.clinicus.models.services
 
 import com.google.firebase.perf.ktx.trace
 import com.google.firebase.perf.metrics.Trace

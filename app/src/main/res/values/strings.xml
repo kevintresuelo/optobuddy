@@ -15,4 +15,7 @@
     <string name="update_failed">An error occurred while updating. Please update the app via Google Play instead.</string>
     <string name="update_canceled">Updating was cancelled. You may update the app via Google Play instead.</string>
     <string name="update_restart">Install</string>
+
+    <!-- Help -->
+    <string name="help_accommodation">Accommodative tests</string>
 </resources>

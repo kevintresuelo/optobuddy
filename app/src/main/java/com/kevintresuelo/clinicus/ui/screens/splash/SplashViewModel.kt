@@ -6,6 +6,8 @@ import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.kevintresuelo.clinicus.CATALOG_SCREEN
+import com.kevintresuelo.clinicus.SPLASH_SCREEN
 import com.kevintresuelo.clinicus.models.Device
 import com.kevintresuelo.clinicus.ui.screens.ClinicusViewModel
 import com.kevintresuelo.clinicus.utils.*
@@ -26,10 +28,9 @@ class SplashViewModel @Inject constructor(
     logService: LogService
 ) : ClinicusViewModel(logService) {
 
-    var doneLoadingPatient: Boolean by mutableStateOf(false)
+    var doneLoading: Boolean by mutableStateOf(false)
     var doneLoadingOnboarding: Boolean by mutableStateOf(false)
 
-    private var patientUid: String? by mutableStateOf(null)
     private var hasFinishedOnboarding: Boolean by mutableStateOf(false)
 
     init {
@@ -38,6 +39,8 @@ class SplashViewModel @Inject constructor(
         launchCatching {
             contextService.getApplicationContext().readString(DataStore.PreferenceKeys.DEVICE_UID).collect {
                 val device = if (it.isBlank()) null else storageService.getDevice(it)
+
+                doneLoading = true
 
                 if (device == null) {
                     val id = autoId()
@@ -60,12 +63,20 @@ class SplashViewModel @Inject constructor(
         }
 
         launchCatching {
+            contextService.getApplicationContext().readBool(DataStore.PreferenceKeys.HAS_FINISHED_ONBOARDING).collect {
+                hasFinishedOnboarding = it
+
+                doneLoadingOnboarding = true
+            }
+        }
+
+        launchCatching {
             configurationService.fetchConfiguration()
         }
     }
 
     fun onAppStart(openAndPopUp: (String, String) -> Unit) {
-        //openAndPopUp(CATALOG_SCREEN, SPLASH_SCREEN)
+        openAndPopUp(CATALOG_SCREEN, SPLASH_SCREEN)
     }
 
     private fun createNotificationChannels(context: Context) {

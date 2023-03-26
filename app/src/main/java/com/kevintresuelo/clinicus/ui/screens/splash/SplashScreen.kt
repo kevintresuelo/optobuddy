@@ -43,7 +43,7 @@ fun SplashScreen(
 
     SplashScreenUI(modifier)
 
-    if (viewModel.doneLoadingPatient && viewModel.doneLoadingOnboarding) {
+    if (viewModel.doneLoading && viewModel.doneLoadingOnboarding) {
         LaunchedEffect(true) {
             delay(SPLASH_TIMEOUT)
             viewModel.onAppStart(openAndPopUp)

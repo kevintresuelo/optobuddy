@@ -29,6 +29,7 @@
     <string name="tools_contact_lens_sphere_title">Sphere</string>
     <string name="tools_contact_lens_cylinder_title">Cylinder</string>
     <string name="tools_contact_lens_axis_title">Axis</string>
+    <string name="tools_contact_lens_calculate">Compute Effective Power</string>
 
     <string name="tools_accommodation">Accommodative tests</string>
 </resources>

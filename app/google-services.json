@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "919137902532",
+    "project_id": "com-kevintresuelo-clinicus",
+    "storage_bucket": "com-kevintresuelo-clinicus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:919137902532:android:6ebce3fdeab16b64074e91",
+        "android_client_info": {
+          "package_name": "com.kevintresuelo.clinicus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "919137902532-lltg9dmbks2lo0b652piq59djapo9tok.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKijEnlljmR0wTfXM1sh8g2o5HgilNxfg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "919137902532-lltg9dmbks2lo0b652piq59djapo9tok.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

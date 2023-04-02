@@ -16,6 +16,19 @@
     <string name="update_canceled">Updating was cancelled. You may update the app via Google Play instead.</string>
     <string name="update_restart">Install</string>
 
-    <!-- Help -->
-    <string name="help_accommodation">Accommodative tests</string>
+    <!-- Generic -->
+    <string name="generic_sph_unit">D Sph</string>
+    <string name="generic_cyl_unit">D Cyl</string>
+    <string name="generic_axis_prefix">&#215;</string>
+    <string name="generic_error_positive_cylinder">Only minus cylinder powers are accepted.</string>
+
+    <!-- Tools -->
+    <string name="tools_contact_lens_title">Contact Lens</string>
+    <string name="tools_contact_lens_spectacle_power">Spectacle power</string>
+    <string name="tools_contact_lens_cl_power">Contact lens power</string>
+    <string name="tools_contact_lens_sphere_title">Sphere</string>
+    <string name="tools_contact_lens_cylinder_title">Cylinder</string>
+    <string name="tools_contact_lens_axis_title">Axis</string>
+
+    <string name="tools_accommodation">Accommodative tests</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.kevintresuelo.clinicus.CATALOG_SCREEN
+import com.kevintresuelo.clinicus.CONTACT_LENS_SCREEN
 import com.kevintresuelo.clinicus.SPLASH_SCREEN
 import com.kevintresuelo.clinicus.models.Device
 import com.kevintresuelo.clinicus.ui.screens.ClinicusViewModel
@@ -76,7 +77,8 @@ class SplashViewModel @Inject constructor(
     }
 
     fun onAppStart(openAndPopUp: (String, String) -> Unit) {
-        openAndPopUp(CATALOG_SCREEN, SPLASH_SCREEN)
+        // openAndPopUp(CATALOG_SCREEN, SPLASH_SCREEN)
+        openAndPopUp(CONTACT_LENS_SCREEN, SPLASH_SCREEN)
     }
 
     private fun createNotificationChannels(context: Context) {

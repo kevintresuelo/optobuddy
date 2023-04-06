@@ -78,27 +78,11 @@ fun isOnline(context: Context): Boolean {
     }
 }
 
-fun getValidatedSphere(text: String): String {
+fun getValidatedPower(text: String): String {
     val filteredChars = text.filterIndexed { index, c ->
-        c in "0123456789" ||                      // Take all digits
-                (c == '.' && text.indexOf('.') == index) || // Take only the first decimal
-                (c == '-' && text.indexOf('-') == 0) // Take only the first negation
-    }
-    // Now we need to remove extra digits from the input
-    return if(filteredChars.contains('.')) {
-        val beforeDecimal = filteredChars.substringBefore('.')
-        val afterDecimal = filteredChars.substringAfter('.')
-        beforeDecimal + "." + afterDecimal.take(2)    // If decimal is present, take first 3 digits before decimal and first 2 digits after decimal
-    } else {
-        filteredChars                     // If there is no decimal, just take the first 3 digits
-    }
-}
-
-fun getValidatedCylinder(text: String): String {
-    val filteredChars = text.filterIndexed { index, c ->
-        c in "0123456789" ||                      // Take all digits
-                (c == '.' && text.indexOf('.') == index) || // Take only the first decimal
-                (c == '-' && text.indexOf('-') == 0) // Take only the first negation
+        c in "0123456789" ||                                        // Take all digits
+                (c == '.' && text.indexOf('.') == index) ||    // Take only the first decimal
+                (c == '-' && text.indexOf('-') == 0)           // Take only the first negation
     }
     // Now we need to remove extra digits from the input
     return if(filteredChars.contains('.')) {
@@ -111,5 +95,8 @@ fun getValidatedCylinder(text: String): String {
 }
 
 fun getValidatedAxis(text: String): String {
-    return if (text.isNotEmpty()) { text.toInt().coerceIn(1, 180).toString() } else { text }
+    val filteredChars = text.filterIndexed { index, c ->
+        c in "0123456789"   // Take all digits
+    }
+    return if (filteredChars.isNotEmpty()) { filteredChars.toInt().coerceIn(1, 180).toString() } else { filteredChars }
 }

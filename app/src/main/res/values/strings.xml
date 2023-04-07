@@ -44,4 +44,10 @@
     <string name="tools_accommodation_title">Accommodative tests</string>
     <string name="tools_accommodation_hofstetter">Expected amplitude of accommodation</string>
     <string name="tools_accommodation_age">Patient&#8217;s age</string>
+    <string name="tools_accommodation_tab_npa">NPA</string>
+    <string name="tools_accommodation_tab_npa_expanded">Near point of accommodation</string>
+    <string name="tools_accommodation_tab_npa_distance">Near point distance</string>
+    <string name="tools_accommodation_tab_npa_distance_unit">Unit</string>
+    <string name="tools_accommodation_tab_aoa">AOA</string>
+    <string name="tools_accommodation_tab_aoa_expanded">Amplitude of accommodation</string>
 </resources>

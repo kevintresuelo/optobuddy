@@ -102,11 +102,27 @@ fun getValidatedAxis(text: String): String {
     return if (filteredChars.isNotEmpty()) { filteredChars.toInt().coerceIn(1, 180).toString() } else { filteredChars }
 }
 
-fun getValidatedAge(text: String): String {
+fun getValidatedInteger(text: String): String {
     val filteredChars = text.filterIndexed { index, c ->
         c in "0123456789"   // Take all digits
     }
     return if (filteredChars.isNotEmpty()) { filteredChars.toInt().coerceIn(0, 100).toString() } else { filteredChars }
+}
+
+fun getValidatedDecimal(text: String): String {
+    val filteredChars = text.filterIndexed { index, c ->
+        c in "0123456789" ||  // Take all digits
+        (c == '.' && text.indexOf('.') == index)    // Take only the first decimal
+    }
+
+    // Now we need to remove extra digits from the input
+    return if(filteredChars.contains('.')) {
+        val beforeDecimal = filteredChars.substringBefore('.')
+        val afterDecimal = filteredChars.substringAfter('.')
+        beforeDecimal + "." + afterDecimal.take(3)    // If decimal is present, take first 3 digits before decimal and first 2 digits after decimal
+    } else {
+        filteredChars                     // If there is no decimal, just take the first 3 digits
+    }
 }
 
 fun argbToHex(argb: Int): String {
@@ -131,8 +147,8 @@ fun Float.formatDiopter(round: Boolean = false, withSign: Boolean = false): Stri
     return sign + String.format("%.2f", dioptricPower)
 }
 
-fun Any.formatDecimal(): String {
-    val df = DecimalFormat("#.#####")
+fun Any.formatDecimal(places: Int = 5): String {
+    val df = DecimalFormat("#." + "#".repeat(places))
 
     return df.format(this)
 }

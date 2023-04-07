@@ -7,11 +7,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,7 +26,8 @@ import com.kevintresuelo.clinicus.ClinicusAppState
 import com.kevintresuelo.clinicus.R
 import com.kevintresuelo.clinicus.ui.screens.catalog.contactlenspower.ContactLensPowerViewModel
 import com.kevintresuelo.clinicus.utils.formatDecimal
-import com.kevintresuelo.clinicus.utils.getValidatedAge
+import com.kevintresuelo.clinicus.utils.getValidatedDecimal
+import com.kevintresuelo.clinicus.utils.getValidatedInteger
 import com.kevintresuelo.clinicus.R.drawable as AppDrawables
 import com.kevintresuelo.clinicus.R.string as AppStrings
 
@@ -79,7 +77,7 @@ fun AccommodationScreen(
         TextField(
             value = age,
             onValueChange = {
-                age = getValidatedAge(it)
+                age = getValidatedInteger(it)
 
                 showHofstetter = age.isNotBlank() && age.toIntOrNull() != null
             },
@@ -100,6 +98,31 @@ fun AccommodationScreen(
         }
 
         Divider()
+
+        val tabs = listOf(stringResource(id = AppStrings.tools_accommodation_tab_npa), stringResource(id = AppStrings.tools_accommodation_tab_aoa))
+        var selectedTab by rememberSaveable { mutableStateOf(0) }
+
+        Column(modifier = Modifier.fillMaxWidth()) {
+            TabRow(
+                selectedTabIndex = selectedTab
+            ) {
+                tabs.forEachIndexed { index, title ->
+                    Tab(text = { Text(title) },
+                        selected = selectedTab == index,
+                        onClick = { selectedTab = index },
+                    )
+                }
+            }
+        }
+
+        when(selectedTab) {
+            0 -> {
+                NearPointOfAccommodation()
+            }
+            1 -> {
+                AmplitudeOfAccommodation()
+            }
+        }
 
     }
 }
@@ -197,4 +220,177 @@ fun HofstetterAmplitude(
             }
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NearPointOfAccommodation() {
+    Text(
+        text = stringResource(id = AppStrings.tools_accommodation_tab_npa_expanded),
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.primary
+    )
+
+    var distance by rememberSaveable { mutableStateOf("") }
+    var showNpaSolution by rememberSaveable { mutableStateOf(false) }
+
+    val unitOptions = listOf("in", "cm", "mm")
+    var selectedUnitOption by remember { mutableStateOf(unitOptions[0]) }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+
+        TextField(
+            value = distance,
+            onValueChange = {
+                distance = getValidatedDecimal(it)
+
+                showNpaSolution = distance.isNotBlank() && distance.toIntOrNull() != null
+            },
+            modifier = Modifier
+                .weight(7f),
+            label = { Text(text = stringResource(id = AppStrings.tools_accommodation_tab_npa_distance)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+        )
+
+        var expanded by remember { mutableStateOf(false) }
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded },
+            modifier = Modifier
+                .weight(3f)
+        ) {
+            TextField(
+                // The `menuAnchor` modifier must be passed to the text field for correctness.
+                modifier = Modifier.menuAnchor(),
+                readOnly = true,
+                value = selectedUnitOption,
+                onValueChange = {},
+                label = { Text(stringResource(id = AppStrings.tools_accommodation_tab_npa_distance_unit)) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(),
+            )
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+            ) {
+                unitOptions.forEach { selectionOption ->
+                    DropdownMenuItem(
+                        text = { Text(selectionOption) },
+                        onClick = {
+                            selectedUnitOption = selectionOption
+                            expanded = false
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                    )
+                }
+            }
+        }
+    }
+
+    val latexColor = MaterialTheme.colorScheme.onBackground.toArgb()
+
+    if (showNpaSolution) {
+        when (selectedUnitOption) {
+            "in" -> {
+                val npaInLatex = "\$\$ \\begin{aligned}" +
+                        "P &= \\frac{40}{f_{in}} \\\\" +
+                        "&= \\frac{40}{${distance.toFloat().formatDecimal()}} \\\\" +
+                        "&= ${(40/distance.toFloat()).formatDecimal()} \\\\" +
+                        "\\end{aligned} \\\\" +
+                        "\\boxed{P = ${(40/distance.toFloat()).formatDecimal()} \\space \\text{D} } \$\$"
+
+                Column (
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    AndroidView(
+                        factory = { context ->
+                            val view = LayoutInflater.from(context)
+                                .inflate(R.layout.layout_latex, null, false) as KatexView
+
+                            view.setText(npaInLatex)
+                            view.setTextColor(latexColor)
+
+                            view
+                        },
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally),
+                        update = {
+                            it.setText(npaInLatex)
+                        }
+                    )
+                }
+            }
+            "cm" -> {
+                val npaCmLatex = "\$\$ \\begin{aligned}" +
+                        "P &= \\frac{100}{f_{in}} \\\\" +
+                        "&= \\frac{100}{${distance.toFloat().formatDecimal()}} \\\\" +
+                        "&= ${(100/distance.toFloat()).formatDecimal()} \\\\" +
+                        "\\end{aligned} \\\\" +
+                        "\\boxed{P = ${(100/distance.toFloat()).formatDecimal()} \\space \\text{D} } \$\$"
+
+                Column (
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    AndroidView(
+                        factory = { context ->
+                            val view = LayoutInflater.from(context)
+                                .inflate(R.layout.layout_latex, null, false) as KatexView
+
+                            view.setText(npaCmLatex)
+                            view.setTextColor(latexColor)
+
+                            view
+                        },
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally),
+                        update = {
+                            it.setText(npaCmLatex)
+                        }
+                    )
+                }
+            }
+            "mm" -> {
+                val npaMmLatex = "\$\$ \\begin{aligned}" +
+                        "P &= \\frac{1000}{f_{in}} \\\\" +
+                        "&= \\frac{1000}{${distance.toFloat().formatDecimal()}} \\\\" +
+                        "&= ${(1000/distance.toFloat()).formatDecimal()} \\\\" +
+                        "\\end{aligned} \\\\" +
+                        "\\boxed{P = ${(1000/distance.toFloat()).formatDecimal()} \\space \\text{D} } \$\$"
+
+                Column (
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    AndroidView(
+                        factory = { context ->
+                            val view = LayoutInflater.from(context)
+                                .inflate(R.layout.layout_latex, null, false) as KatexView
+
+                            view.setText(npaMmLatex)
+                            view.setTextColor(latexColor)
+
+                            view
+                        },
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally),
+                        update = {
+                            it.setText(npaMmLatex)
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun AmplitudeOfAccommodation() {
+    Text(
+        text = stringResource(id = AppStrings.tools_accommodation_tab_aoa_expanded),
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.primary
+    )
 }

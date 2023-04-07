@@ -41,5 +41,7 @@
     <string name="tools_contact_lens_spherical_equivalent_calculate">Compute spherical equivalent</string>
     <string name="tools_contact_lens_error_msg_invalid_spec_sph">To continue with the computation, please provide a valid spectacle sphere power.</string>
 
-    <string name="tools_accommodation">Accommodative tests</string>
+    <string name="tools_accommodation_title">Accommodative tests</string>
+    <string name="tools_accommodation_hofstetter">Expected amplitude of accommodation</string>
+    <string name="tools_accommodation_age">Patient&#8217;s age</string>
 </resources>

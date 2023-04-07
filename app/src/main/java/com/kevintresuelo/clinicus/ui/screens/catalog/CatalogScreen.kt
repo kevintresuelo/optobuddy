@@ -11,7 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.kevintresuelo.clinicus.CONTACT_LENS_SCREEN
+import com.kevintresuelo.clinicus.ACCOMMODATION_SCREEN
+import com.kevintresuelo.clinicus.CONTACT_LENS_POWER_SCREEN
 import com.kevintresuelo.clinicus.ClinicusAppState
 import com.kevintresuelo.clinicus.R.string as AppStrings
 
@@ -39,12 +40,12 @@ fun CatalogScreen(
         HelpCards(
             title = AppStrings.tools_contact_lens_title,
         ) {
-            navigate(CONTACT_LENS_SCREEN)
+            navigate(CONTACT_LENS_POWER_SCREEN)
         }
         HelpCards(
-            title = AppStrings.tools_accommodation,
+            title = AppStrings.tools_accommodation_title,
         ) {
-            // navigate(EXERCISE_PUSHUP_SCREEN)
+            navigate(ACCOMMODATION_SCREEN)
         }
     }
 }

@@ -1,8 +1,7 @@
-package com.kevintresuelo.clinicus.ui.screens.catalog.contactlens
+package com.kevintresuelo.clinicus.ui.screens.catalog.contactlenspower
 
 import android.view.LayoutInflater
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -10,8 +9,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,15 +32,15 @@ import com.kevintresuelo.clinicus.ClinicusAppState
 import com.kevintresuelo.clinicus.R
 import com.kevintresuelo.clinicus.utils.*
 import java.text.DecimalFormat
-import com.kevintresuelo.clinicus.R.string as AppStrings
 import com.kevintresuelo.clinicus.R.drawable as AppDrawables
+import com.kevintresuelo.clinicus.R.string as AppStrings
 
 @Composable
-fun ContactLensScreen(
+fun ContactLensPowerScreen(
     appState: ClinicusAppState,
     openAndPopUp: (String, String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ContactLensViewModel = hiltViewModel()
+    viewModel: ContactLensPowerViewModel = hiltViewModel()
 ) {
 
     appState.systemUiController.setSystemBarsColor(

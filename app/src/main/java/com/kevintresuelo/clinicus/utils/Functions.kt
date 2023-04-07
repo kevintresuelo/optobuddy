@@ -102,6 +102,13 @@ fun getValidatedAxis(text: String): String {
     return if (filteredChars.isNotEmpty()) { filteredChars.toInt().coerceIn(1, 180).toString() } else { filteredChars }
 }
 
+fun getValidatedAge(text: String): String {
+    val filteredChars = text.filterIndexed { index, c ->
+        c in "0123456789"   // Take all digits
+    }
+    return if (filteredChars.isNotEmpty()) { filteredChars.toInt().coerceIn(0, 100).toString() } else { filteredChars }
+}
+
 fun argbToHex(argb: Int): String {
     return Integer.toHexString(argb)
 }

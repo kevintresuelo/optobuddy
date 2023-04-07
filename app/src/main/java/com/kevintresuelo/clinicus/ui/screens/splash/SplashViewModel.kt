@@ -6,16 +6,15 @@ import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.kevintresuelo.clinicus.CATALOG_SCREEN
-import com.kevintresuelo.clinicus.CONTACT_LENS_SCREEN
+import com.kevintresuelo.clinicus.ACCOMMODATION_SCREEN
 import com.kevintresuelo.clinicus.SPLASH_SCREEN
 import com.kevintresuelo.clinicus.models.Device
-import com.kevintresuelo.clinicus.ui.screens.ClinicusViewModel
-import com.kevintresuelo.clinicus.utils.*
 import com.kevintresuelo.clinicus.models.services.ConfigurationService
 import com.kevintresuelo.clinicus.models.services.ContextService
 import com.kevintresuelo.clinicus.models.services.LogService
 import com.kevintresuelo.clinicus.models.services.StorageService
+import com.kevintresuelo.clinicus.ui.screens.ClinicusViewModel
+import com.kevintresuelo.clinicus.utils.*
 import com.kevintresuelo.clinicus.utils.notifications.NotificationChannels
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -78,7 +77,7 @@ class SplashViewModel @Inject constructor(
 
     fun onAppStart(openAndPopUp: (String, String) -> Unit) {
         // openAndPopUp(CATALOG_SCREEN, SPLASH_SCREEN)
-        openAndPopUp(CONTACT_LENS_SCREEN, SPLASH_SCREEN)
+        openAndPopUp(ACCOMMODATION_SCREEN, SPLASH_SCREEN)
     }
 
     private fun createNotificationChannels(context: Context) {

@@ -27,7 +27,10 @@
     <!-- Tools -->
     <string name="tools_contact_lens_title">Contact Lens</string>
     <string name="tools_contact_lens_spectacle_power">Spectacle power</string>
-    <string name="tools_contact_lens_optical_cross">Optical cross</string>
+    <string name="tools_contact_lens_spectacle_optical_cross">Spectacle power optical cross</string>
+    <string name="tools_contact_lens_cl_optical_cross">Contact lens power optical cross</string>
+    <string name="tools_contact_lens_spectacle_prescription">Spectacle &#8478;</string>
+    <string name="tools_contact_lens_cl_prescription">Contact lens &#8478;</string>
     <string name="tools_contact_lens_effective_power">Effective power/Contact lens power</string>
     <string name="tools_contact_lens_sphere_title">Sphere</string>
     <string name="tools_contact_lens_cylinder_title">Cylinder</string>

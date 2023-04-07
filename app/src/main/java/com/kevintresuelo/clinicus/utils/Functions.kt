@@ -79,10 +79,10 @@ fun isOnline(context: Context): Boolean {
 }
 
 fun getValidatedPower(text: String): String {
-    val filteredChars = text.filterIndexed { index, c ->
-        c in "0123456789" ||                                        // Take all digits
-                (c == '.' && text.indexOf('.') == index) ||    // Take only the first decimal
-                (c == '-' && text.indexOf('-') == 0)           // Take only the first negation
+    val filteredChars = text.filterIndexed { index, char ->
+        char in "0123456789" ||                                        // Take all digits
+                (char == '.' && text.indexOf('.') == index) ||    // Take only the first decimal
+                (char == '-' && text.indexOf('-') == index && text.indexOf('-') == 0)       // Take only the first negation
     }
     // Now we need to remove extra digits from the input
     return if(filteredChars.contains('.')) {
@@ -99,4 +99,22 @@ fun getValidatedAxis(text: String): String {
         c in "0123456789"   // Take all digits
     }
     return if (filteredChars.isNotEmpty()) { filteredChars.toInt().coerceIn(1, 180).toString() } else { filteredChars }
+}
+
+fun formatDiopter(power: Float, round: Boolean = false, withSign: Boolean = false): String {
+    val sign = if (power > 0) "+" else ""
+    val dioptricPower = if (round) 0.25 * (Math.round(power / 0.25)) else power
+
+    return sign + String.format("%.2f", dioptricPower)
+}
+
+fun formatDiopter(power: Double, round: Boolean = false, withSign: Boolean = false): String {
+    val sign = if (power > 0) "+" else ""
+    val dioptricPower = if (round) 0.25 * (Math.round(power / 0.25)) else power
+
+    return sign + String.format("%.2f", dioptricPower)
+}
+
+fun argbToHex(argb: Int): String {
+    return Integer.toHexString(argb)
 }

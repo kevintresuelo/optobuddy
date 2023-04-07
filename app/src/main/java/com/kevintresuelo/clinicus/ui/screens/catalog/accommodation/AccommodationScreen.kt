@@ -24,10 +24,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.judemanutd.katexview.KatexView
 import com.kevintresuelo.clinicus.ClinicusAppState
 import com.kevintresuelo.clinicus.R
+import com.kevintresuelo.clinicus.components.buttons.SegmentedButton
 import com.kevintresuelo.clinicus.ui.screens.catalog.contactlenspower.ContactLensPowerViewModel
-import com.kevintresuelo.clinicus.utils.formatDecimal
-import com.kevintresuelo.clinicus.utils.getValidatedDecimal
-import com.kevintresuelo.clinicus.utils.getValidatedInteger
+import com.kevintresuelo.clinicus.utils.*
 import com.kevintresuelo.clinicus.R.drawable as AppDrawables
 import com.kevintresuelo.clinicus.R.string as AppStrings
 
@@ -393,4 +392,53 @@ fun AmplitudeOfAccommodation() {
         style = MaterialTheme.typography.labelLarge,
         color = MaterialTheme.colorScheme.primary
     )
+
+    val focusManager = LocalFocusManager.current
+
+    var distanceCorrection by rememberSaveable { mutableStateOf("") }
+    var lensToBlur by rememberSaveable { mutableStateOf("") }
+
+    val aoaCategories = listOf("Non-presbyope", "Presbyope")
+    var selectedAoaCategory by rememberSaveable { mutableStateOf(0) }
+
+    SegmentedButton(
+        buttonTexts = aoaCategories
+    ) {
+        selectedAoaCategory = it
+    }
+
+    TextField(
+        value = distanceCorrection,
+        onValueChange = {
+            distanceCorrection = getValidatedPower(it)
+        },
+        modifier = Modifier
+            .fillMaxWidth(),
+        label = { Text(text = stringResource(id = AppStrings.tools_accommodation_tab_aoa_distance_sph)) },
+        suffix = { Text(text = stringResource(id = AppStrings.generic_sph_unit)) },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+    )
+
+    TextField(
+        value = lensToBlur,
+        onValueChange = {
+            lensToBlur = getValidatedPower(it)
+        },
+        modifier = Modifier
+            .fillMaxWidth(),
+        label = { Text(text = stringResource(id = AppStrings.tools_accommodation_tab_aoa_lens_to_blur)) },
+        suffix = { Text(text = stringResource(id = AppStrings.generic_sph_unit)) },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+    )
+
+    Button(
+        onClick = {
+            focusManager.clearFocus()
+        },
+        modifier = Modifier
+            .fillMaxWidth(),
+        colors = ButtonDefaults.filledTonalButtonColors()
+    ) {
+        Text(text = stringResource(id = AppStrings.tools_accommodation_tab_aoa_calculate))
+    }
 }

@@ -52,6 +52,9 @@
     <string name="tools_accommodation_tab_aoa">AOA</string>
     <string name="tools_accommodation_tab_aoa_expanded">Amplitude of accommodation</string>
     <string name="tools_accommodation_tab_aoa_distance_sph">Subjective distance Rx (Sph)</string>
-    <string name="tools_accommodation_tab_aoa_lens_to_blur">Lens to blur (Sph)</string>
+    <string name="tools_accommodation_tab_aoa_lens_to_blur">Lens to blur out (Sph)</string>
     <string name="tools_accommodation_tab_aoa_calculate">Compute AOA</string>
+    <string name="tools_accommodation_tab_aoa_error_msg_invalid_power">To continue with the computation, please provide a valid distance Rx and lens to blur out.</string>
+    <string name="tools_accommodation_tab_aoa_error_msg_nonpresbyope_but_plus">You selected non-presbyope but you added plus lenses to blur out from the distance correction. Are you sure with that?</string>
+    <string name="tools_accommodation_tab_aoa_error_msg_presbyope_but_minus">You selected presbyope but you added minus lenses to blur out from the distance correction. Are you sure with that?</string>
 </resources>

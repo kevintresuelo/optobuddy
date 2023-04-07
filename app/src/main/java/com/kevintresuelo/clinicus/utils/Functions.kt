@@ -7,6 +7,7 @@ import android.os.Build
 import android.util.Log
 import org.json.JSONObject
 import java.security.SecureRandom
+import java.text.DecimalFormat
 import java.util.*
 
 fun getDeviceDetails(): String {
@@ -101,20 +102,30 @@ fun getValidatedAxis(text: String): String {
     return if (filteredChars.isNotEmpty()) { filteredChars.toInt().coerceIn(1, 180).toString() } else { filteredChars }
 }
 
-fun formatDiopter(power: Float, round: Boolean = false, withSign: Boolean = false): String {
-    val sign = if (power > 0) "+" else ""
-    val dioptricPower = if (round) 0.25 * (Math.round(power / 0.25)) else power
-
-    return sign + String.format("%.2f", dioptricPower)
-}
-
-fun formatDiopter(power: Double, round: Boolean = false, withSign: Boolean = false): String {
-    val sign = if (power > 0) "+" else ""
-    val dioptricPower = if (round) 0.25 * (Math.round(power / 0.25)) else power
-
-    return sign + String.format("%.2f", dioptricPower)
-}
-
 fun argbToHex(argb: Int): String {
     return Integer.toHexString(argb)
+}
+
+fun String.formatDiopter(round: Boolean = false, withSign: Boolean = false): String {
+    return this.toFloat().formatDiopter(round, withSign)
+}
+
+fun Double.formatDiopter(round: Boolean = false, withSign: Boolean = false): String {
+    val sign = if (this > 0 && withSign) "+" else ""
+    val dioptricPower = if (round) 0.25 * (Math.round(this / 0.25)) else this
+
+    return sign + String.format("%.2f", dioptricPower)
+}
+
+fun Float.formatDiopter(round: Boolean = false, withSign: Boolean = false): String {
+    val sign = if (this > 0 && withSign) "+" else ""
+    val dioptricPower = if (round) 0.25 * (Math.round(this / 0.25)) else this
+
+    return sign + String.format("%.2f", dioptricPower)
+}
+
+fun Any.formatDecimal(): String {
+    val df = DecimalFormat("#.#####")
+
+    return df.format(this)
 }

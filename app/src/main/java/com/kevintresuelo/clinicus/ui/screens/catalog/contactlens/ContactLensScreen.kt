@@ -1,6 +1,7 @@
 package com.kevintresuelo.clinicus.ui.screens.catalog.contactlens
 
 import android.view.LayoutInflater
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -18,6 +19,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -29,8 +31,8 @@ import com.kevintresuelo.clinicus.R
 import com.kevintresuelo.clinicus.utils.*
 import java.text.DecimalFormat
 import com.kevintresuelo.clinicus.R.string as AppStrings
+import com.kevintresuelo.clinicus.R.drawable as AppDrawables
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactLensScreen(
     appState: ClinicusAppState,
@@ -63,12 +65,13 @@ fun ContactLensScreen(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Box(
+        Image(
+            painter = painterResource(id = AppDrawables.headers_contact_lens),
+            contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1.77f)
                 .clip(shape = CardDefaults.shape)
-                .background(color = MaterialTheme.colorScheme.primary)
         )
 
         Text(
@@ -145,7 +148,7 @@ fun ContactLensScreen(
                     return@Button
                 }
 
-                spectacleSphere = formatDiopter(spectacleSphereFloat)
+                spectacleSphere = spectacleSphereFloat.formatDiopter()
 
                 /**
                  * If the cylinder power is zero, we erase the cylinder power and
@@ -157,11 +160,11 @@ fun ContactLensScreen(
                     spectacleCylinder = ""
                     spectacleAxis = ""
                 } else {
-                    spectacleCylinder = formatDiopter(spectacleCylinderFloat)
+                    spectacleCylinder = spectacleCylinderFloat.formatDiopter()
                     spectacleAxis = spectacleAxisInt.toString()
                 }
 
-                showCalculation = !showCalculation
+                showCalculation = true
 
                 focusManager.clearFocus()
             },
@@ -180,13 +183,13 @@ fun ContactLensScreen(
             ) {
                 if (spectacleCylinder.isNullOrEmpty()) {
                     SphereContactLensPower(
-                        spectacleSphere = spectacleSphere
+                        spectacleSphere = spectacleSphere.toFloat()
                     )
                 } else {
                     SpherocylinderContactLensPower(
-                        spectacleSphere = spectacleSphere,
-                        spectacleCylinder = spectacleCylinder,
-                        spectacleAxis = spectacleAxis,
+                        spectacleSphere = spectacleSphere.toFloat(),
+                        spectacleCylinder = spectacleCylinder.toFloat(),
+                        spectacleAxis = spectacleAxis.toInt(),
                     )
                 }
             }
@@ -218,21 +221,21 @@ fun ContactLensScreen(
 
 @Composable
 fun SphereContactLensPower(
-    spectacleSphere: String,
+    spectacleSphere: Float,
     modifier: Modifier = Modifier
 ) {
-    val df = DecimalFormat("#.#####")
+    val spherePower = spectacleSphere.formatDecimal()
 
-    val clSphere = df.format(spectacleSphere.toFloat()/(1-(df.format(0.012*spectacleSphere.toFloat()).toFloat())))
+    val clSphere = (spectacleSphere/(1-((0.012*spectacleSphere).formatDecimal().toFloat()))).formatDecimal()
 
     val clPowerLatex = "\$\$ \\begin{aligned}" +
             "F &= \\frac{SR}{1-(VD)(SR)} \\\\" +
-            "&= \\frac{ $spectacleSphere \\space \\text{D} }{1-(0.012)( $spectacleSphere \\space \\text{D} )} \\\\" +
-            "&= \\frac{ $spectacleSphere \\space \\text{D} }{1-(${df.format(0.012*spectacleSphere.toFloat())} \\space \\text{D} )} \\\\" +
-            "&= \\frac{ $spectacleSphere \\space \\text{D} }{${1-(df.format(0.012*spectacleSphere.toFloat()).toFloat())} \\space \\text{D} } \\\\" +
+            "&= \\frac{ ${spherePower.formatDiopter()} \\space \\text{D} }{1-(0.012)( ${spherePower.formatDiopter()} \\space \\text{D} )} \\\\" +
+            "&= \\frac{ ${spherePower.formatDiopter()} \\space \\text{D} }{1-(${(0.012*spherePower.toFloat()).formatDecimal()}  )} \\\\" +
+            "&= \\frac{ $spherePower \\space \\text{D} }{${1-((0.012*spherePower.toFloat()).formatDecimal()).toFloat()} } \\\\" +
             "&= $clSphere \\space \\text{D} \\\\" +
             "\\end{aligned} \\\\" +
-            "\\boxed{F = ${formatDiopter(clSphere.toFloat())} \\space \\text{D} } \$\$"
+            "\\boxed{F = ${clSphere.formatDiopter()} \\space \\text{D} } \$\$"
 
     val latexColor = MaterialTheme.colorScheme.onBackground.toArgb()
 
@@ -265,34 +268,54 @@ fun SphereContactLensPower(
         )
     }
 
-    Text(
-        text = "Spectacle Rx: $spectacleSphere D Sph",
-        style = MaterialTheme.typography.titleMedium
-    )
 
-    Text(
-        text = "Contact lens Rx: ${formatDiopter(0.25*(Math.round(clSphere.toFloat()/0.25)))} D Sph",
-        style = MaterialTheme.typography.titleMedium
-    )
+
+    Divider()
+
+    Column {
+        Text(
+            text = stringResource(id = AppStrings.tools_contact_lens_spectacle_prescription),
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.labelLarge,
+        )
+
+        Text(
+            text = "${spherePower.formatDiopter(round = true, withSign = true)} D Sph",
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+
+    Column {
+        Text(
+            text = stringResource(id = AppStrings.tools_contact_lens_cl_prescription),
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.labelLarge,
+        )
+
+        Text(
+            text = "${clSphere.formatDiopter(round = true, withSign = true)} D Sph",
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
 }
 
 @Composable
 fun SpherocylinderContactLensPower(
-    spectacleSphere: String,
-    spectacleCylinder: String,
-    spectacleAxis: String,
+    spectacleSphere: Float,
+    spectacleCylinder: Float,
+    spectacleAxis: Int,
     modifier: Modifier = Modifier
 ) {
-    val df = DecimalFormat("#.#####")
+    val clSphere = (spectacleSphere/(1-((0.012*spectacleSphere).formatDecimal().toFloat()))).formatDecimal()
+    val clCylinder = ((spectacleSphere+spectacleCylinder)/(1-((0.012*(spectacleSphere+spectacleCylinder)).formatDecimal().toFloat()))).formatDecimal()
 
-    val clSphere = df.format(spectacleSphere.toFloat()/(1-(df.format(0.012*spectacleSphere.toFloat()).toFloat())))
-    val clCylinder = df.format((spectacleSphere.toFloat()+spectacleCylinder.toFloat())/(1-(df.format(0.012*(spectacleSphere.toFloat()+spectacleCylinder.toFloat())).toFloat())))
+    val sphereMeridianPower = spectacleSphere
+    val cylinderMeridianPower = spectacleSphere + spectacleCylinder
 
-    val sphereMeridianPower = spectacleSphere.toFloat()
-    val cylinderMeridianPower = spectacleSphere.toFloat() + spectacleCylinder.toFloat()
-
-    val sphereMeridian = spectacleAxis.toInt()
+    val sphereMeridian = spectacleAxis
     val cylinderMeridian = if (sphereMeridian < 90) sphereMeridian + 90 else sphereMeridian - 90
+
+    var showSphericalEquivalent by rememberSaveable { mutableStateOf(false) }
 
     Divider()
 
@@ -348,9 +371,9 @@ fun SpherocylinderContactLensPower(
     val sphereMeridianPowerLatexColorHex = argbToHex(MaterialTheme.colorScheme.secondary.toArgb()).drop(2)
     val sphereMeridianPowerLatex = "\$\$ \\begin{aligned} " +
             "\\textcolor{#$sphereMeridianPowerLatexColorHex}{M_{$sphereMeridian}} &= Sph \\\\" +
-            "&= $spectacleSphere \\space \\text{D} \\\\" +
+            "&= ${spectacleSphere.formatDiopter()} \\space \\text{D} \\\\" +
             "\\end{aligned} \\\\" +
-            "\\boxed{\\textcolor{#$sphereMeridianPowerLatexColorHex}{M_{$sphereMeridian}} = ${formatDiopter(spectacleSphere.toFloat(), withSign = true)} \\space \\text{D} } \$\$"
+            "\\boxed{\\textcolor{#$sphereMeridianPowerLatexColorHex}{M_{$sphereMeridian}} = ${spectacleSphere.formatDiopter(withSign = true)} \\space \\text{D} } \$\$"
 
     Column (
         modifier = Modifier.fillMaxWidth()
@@ -376,10 +399,10 @@ fun SpherocylinderContactLensPower(
     val cylinderMeridianPowerLatexColorHex = argbToHex(MaterialTheme.colorScheme.tertiary.toArgb()).drop(2)
     val cylinderMeridianPowerLatex = "\$\$ \\begin{aligned} " +
             "\\textcolor{#$cylinderMeridianPowerLatexColorHex}{M_{$cylinderMeridian}} &= Sph + Cyl \\\\" +
-            "&= $spectacleSphere \\space \\text{D} + $spectacleCylinder \\space \\text{D} \\\\" +
-            "&= ${formatDiopter(spectacleSphere.toFloat() + spectacleCylinder.toFloat())} \\space \\text{D} \\\\" +
+            "&= ${spectacleSphere.formatDiopter()} \\space \\text{D} + ${spectacleCylinder.formatDiopter()} \\space \\text{D} \\\\" +
+            "&= ${(spectacleSphere + spectacleCylinder).formatDiopter()} \\space \\text{D} \\\\" +
             "\\end{aligned} \\\\" +
-            "\\boxed{\\textcolor{#$cylinderMeridianPowerLatexColorHex}{M_{$cylinderMeridian}} = ${formatDiopter(power = spectacleSphere.toFloat() + spectacleCylinder.toFloat(), withSign = true)} \\space \\text{D} } \$\$"
+            "\\boxed{\\textcolor{#$cylinderMeridianPowerLatexColorHex}{M_{$cylinderMeridian}} = ${(spectacleSphere + spectacleCylinder).formatDiopter(withSign = true)} \\space \\text{D} } \$\$"
 
     Column (
         modifier = Modifier.fillMaxWidth()
@@ -409,15 +432,16 @@ fun SpherocylinderContactLensPower(
         color = MaterialTheme.colorScheme.primary,
         style = MaterialTheme.typography.labelLarge,
     )
+    val df = DecimalFormat("#.#####")
 
     val clSphereMeridianPowerLatex = "\$\$ \\begin{aligned}" +
             "\\textcolor{#$sphereMeridianPowerLatexColorHex}{F_{$sphereMeridian}} &= \\frac{\\textcolor{#$sphereMeridianPowerLatexColorHex}{M_{$sphereMeridian}}}{1-(VD)(\\textcolor{#$sphereMeridianPowerLatexColorHex}{M_{$sphereMeridian}})} \\\\" +
-            "&= \\frac{${sphereMeridianPower} \\space \\text{D} }{1-(0.012)(${sphereMeridianPower} \\space \\text{D} )} \\\\" +
-            "&= \\frac{${sphereMeridianPower} \\space \\text{D} }{1-(${df.format(0.012*sphereMeridianPower.toFloat())} \\space \\text{D} )} \\\\" +
-            "&= \\frac{${sphereMeridianPower} \\space \\text{D} }{${1-(df.format(0.012*sphereMeridianPower.toFloat()).toFloat())} \\space \\text{D} } \\\\" +
+            "&= \\frac{${sphereMeridianPower.formatDiopter()} \\space \\text{D} }{1-(0.012)(${sphereMeridianPower.formatDiopter()} \\space \\text{D} )} \\\\" +
+            "&= \\frac{${sphereMeridianPower.formatDiopter()} \\space \\text{D} }{1-(${df.format(0.012*sphereMeridianPower)} \\space \\text{D} )} \\\\" +
+            "&= \\frac{${sphereMeridianPower.formatDiopter()} \\space \\text{D} }{${1-(df.format(0.012*sphereMeridianPower).toFloat())} \\space \\text{D} } \\\\" +
             "&= $clSphere \\space \\text{D} \\\\" +
             "\\end{aligned} \\\\" +
-            "\\boxed{\\textcolor{#$sphereMeridianPowerLatexColorHex}{F_{$sphereMeridian}} = ${formatDiopter(power = clSphere.toFloat(), round = true, withSign = true)} \\space \\text{D} } \$\$"
+            "\\boxed{\\textcolor{#$sphereMeridianPowerLatexColorHex}{F_{$sphereMeridian}} = ${clSphere.formatDiopter(round = true, withSign = true)} \\space \\text{D} } \$\$"
 
     Column (
         modifier = Modifier.fillMaxWidth()
@@ -442,12 +466,12 @@ fun SpherocylinderContactLensPower(
 
     val clCylinderMeridianPowerLatex = "\$\$ \\begin{aligned}" +
             "\\textcolor{#$cylinderMeridianPowerLatexColorHex}{F_{$cylinderMeridian}} &= \\frac{\\textcolor{#$cylinderMeridianPowerLatexColorHex}{M_{$cylinderMeridian}}}{1-(VD)(\\textcolor{#$cylinderMeridianPowerLatexColorHex}{M_{$cylinderMeridian}})} \\\\" +
-            "&= \\frac{${cylinderMeridianPower} \\space \\text{D} }{1-(0.012)(${cylinderMeridianPower} \\space \\text{D} )} \\\\" +
-            "&= \\frac{${cylinderMeridianPower} \\space \\text{D} }{1-(${df.format(0.012*cylinderMeridianPower.toFloat())} \\space \\text{D} )} \\\\" +
-            "&= \\frac{${cylinderMeridianPower} \\space \\text{D} }{${1-(df.format(0.012*cylinderMeridianPower.toFloat()).toFloat())} \\space \\text{D} } \\\\" +
+            "&= \\frac{${cylinderMeridianPower.formatDiopter()} \\space \\text{D} }{1-(0.012)(${cylinderMeridianPower.formatDiopter()} \\space \\text{D} )} \\\\" +
+            "&= \\frac{${cylinderMeridianPower.formatDiopter()} \\space \\text{D} }{1-(${(0.012*cylinderMeridianPower).formatDecimal()} \\space \\text{D} )} \\\\" +
+            "&= \\frac{${cylinderMeridianPower.formatDiopter()} \\space \\text{D} }{${1-((0.012*cylinderMeridianPower).formatDecimal().toFloat())} \\space \\text{D} } \\\\" +
             "&= $clCylinder \\space \\text{D} \\\\" +
             "\\end{aligned} \\\\" +
-            "\\boxed{\\textcolor{#$cylinderMeridianPowerLatexColorHex}{F_{$cylinderMeridian}} = ${formatDiopter(power = clCylinder.toFloat(), round = true, withSign = true)} \\space \\text{D} } \$\$"
+            "\\boxed{\\textcolor{#$cylinderMeridianPowerLatexColorHex}{F_{$cylinderMeridian}} = ${clCylinder.formatDiopter(round = true, withSign = true)} \\space \\text{D} } \$\$"
 
     Column (
         modifier = Modifier.fillMaxWidth()
@@ -480,9 +504,9 @@ fun SpherocylinderContactLensPower(
 
     val spherePowerLatex = "\$\$ \\begin{aligned} " +
             "Sph &= \\textcolor{#$sphereMeridianPowerLatexColorHex}{F_{$sphereMeridian}} \\\\" +
-            "&= ${formatDiopter(power = clSphere.toFloat(), round = true, withSign = true)} \\space \\text{D} \\\\" +
+            "&= ${clSphere.formatDiopter(round = true, withSign = true)} \\space \\text{D} \\\\" +
             "\\end{aligned} \\\\" +
-            "\\boxed{Sph = ${formatDiopter(power = clSphere.toFloat(), round = true, withSign = true)} \\space \\text{D} } \$\$"
+            "\\boxed{Sph = ${clSphere.formatDiopter(round = true, withSign = true)} \\space \\text{D} } \$\$"
 
     Column (
         modifier = Modifier.fillMaxWidth()
@@ -507,10 +531,10 @@ fun SpherocylinderContactLensPower(
 
     val cylinderPowerLatex = "\$\$ \\begin{aligned} " +
             "Cyl &= \\textcolor{#$cylinderMeridianPowerLatexColorHex}{F_{$cylinderMeridian}} - Sph \\\\" +
-            "&= ${formatDiopter(power = clCylinder.toFloat(), round = true, withSign = true)} \\space \\text{D} - ${formatDiopter(power = clSphere.toFloat(), round = true, withSign = true)} \\space \\text{D} \\\\" +
-            "&= ${df.format(formatDiopter(power = clCylinder.toFloat(), round = true, withSign = true).toFloat() - formatDiopter(power = clSphere.toFloat(), round = true, withSign = true).toFloat())} \\space \\text{D} \\\\" +
+            "&= ${clCylinder.formatDiopter(round = true, withSign = true)} \\space \\text{D} - ${clSphere.formatDiopter(round = true, withSign = true)} \\space \\text{D} \\\\" +
+            "&= ${(clCylinder.formatDiopter(round = true, withSign = true).toFloat() - clSphere.formatDiopter(round = true, withSign = true).toFloat()).formatDiopter(round = true, withSign = true)} \\space \\text{D} \\\\" +
             "\\end{aligned} \\\\" +
-            "\\boxed{Cyl = ${formatDiopter(power = formatDiopter(power = clCylinder.toFloat(), round = true).toFloat() - formatDiopter(power = clSphere.toFloat(), round = true).toFloat(), round = true, withSign = true)} \\space \\text{D} } \$\$"
+            "\\boxed{Cyl = ${(clCylinder.formatDiopter(round = true, withSign = true).toFloat() - clSphere.formatDiopter(round = true, withSign = true).toFloat()).formatDiopter(round = true, withSign = true)} \\space \\text{D} } \$\$"
 
     Column (
         modifier = Modifier.fillMaxWidth()
@@ -543,7 +567,7 @@ fun SpherocylinderContactLensPower(
         )
 
         Text(
-            text = "$spectacleSphere D Sph = $spectacleCylinder D Cyl x $spectacleAxis",
+            text = "${spectacleSphere.formatDiopter(withSign = true)} D Sph = ${spectacleCylinder.formatDiopter(withSign = true)} D Cyl x $spectacleAxis",
             style = MaterialTheme.typography.titleMedium
         )
     }
@@ -556,8 +580,71 @@ fun SpherocylinderContactLensPower(
         )
 
         Text(
-            text = "${formatDiopter(power = clSphere.toFloat(), round = true, withSign = true)} D Sph = ${formatDiopter(power = formatDiopter(power = clCylinder.toFloat(), round = true).toFloat() - formatDiopter(power = clSphere.toFloat(), round = true).toFloat(), round = true, withSign = true)} D Cyl x $spectacleAxis",
+            text = "${clSphere.formatDiopter(round = true, withSign = true)} D Sph = ${(clCylinder.formatDiopter(round = true, withSign = true).toFloat() - clSphere.formatDiopter(round = true, withSign = true).toFloat()).formatDiopter(round = true, withSign = true)} D Cyl x $spectacleAxis",
             style = MaterialTheme.typography.titleMedium
         )
+    }
+
+    if (showSphericalEquivalent) {
+        Divider()
+
+        Text(
+            text = stringResource(id = AppStrings.tools_contact_lens_spherical_equivalent),
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.labelLarge,
+        )
+
+        val sphericalEquivalentLatex = "\$\$ \\begin{aligned} " +
+                "SE &= Sph + \\frac{Cyl}{2} \\\\" +
+                "&= ${clSphere.formatDiopter(round = true, withSign = true)} \\space \\text{D} + \\frac{ ${(clCylinder.formatDiopter(round = true, withSign = true).toFloat() - clSphere.formatDiopter(round = true, withSign = true).toFloat()).formatDiopter(round = true, withSign = true)} \\space \\text{D} }{2} \\\\" +
+                "&= ${clSphere.formatDiopter(round = true, withSign = true)} \\space \\text{D} + ${(((clCylinder.formatDiopter(round = true, withSign = true).toFloat() - clSphere.formatDiopter(round = true, withSign = true).toFloat()).formatDiopter(round = true, withSign = true)).toFloat()/2).formatDecimal()} \\space \\text{D} \\\\" +
+                "&= ${(clSphere.formatDiopter(round = true, withSign = true).toFloat() + ((clCylinder.formatDiopter(round = true, withSign = true).toFloat() - clSphere.formatDiopter(round = true, withSign = true).toFloat()).formatDiopter(round = true, withSign = true)).toFloat()/2).formatDecimal()} \\space \\text{D} \\\\" +
+                "\\end{aligned} \\\\" +
+                "\\boxed{SE = ${(clSphere.formatDiopter(round = true, withSign = true).toFloat() + ((clCylinder.formatDiopter(round = true, withSign = true).toFloat() - clSphere.formatDiopter(round = true, withSign = true).toFloat()).formatDiopter(round = true, withSign = true)).toFloat()/2).formatDiopter(round = true, withSign = true)} \\space \\text{D} } \$\$"
+
+        Column (
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            AndroidView(
+                factory = { context ->
+                    val view = LayoutInflater.from(context)
+                        .inflate(R.layout.layout_latex, null, false) as KatexView
+
+                    view.setText(sphericalEquivalentLatex)
+                    view.setTextColor(latexColor)
+
+                    view
+                },
+                modifier = modifier
+                    .align(Alignment.CenterHorizontally),
+                update = {
+                    it.setText(sphericalEquivalentLatex)
+                }
+            )
+        }
+
+        Column {
+            Text(
+                text = stringResource(id = AppStrings.tools_contact_lens_se_prescription),
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.labelLarge,
+            )
+
+            Text(
+                text = "${(clSphere.formatDiopter(round = true, withSign = true).toFloat() + ((clCylinder.formatDiopter(round = true, withSign = true).toFloat() - clSphere.formatDiopter(round = true, withSign = true).toFloat()).formatDiopter(round = true, withSign = true)).toFloat()/2).formatDiopter(round = true, withSign = true)} D Sph",
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+    } else {
+        Button(
+            onClick = {
+                showSphericalEquivalent = true
+            },
+            modifier = Modifier
+                .fillMaxWidth(),
+            colors = ButtonDefaults.filledTonalButtonColors()
+        ) {
+            Text(text = stringResource(id = AppStrings.tools_contact_lens_spherical_equivalent_calculate))
+        }
     }
 }

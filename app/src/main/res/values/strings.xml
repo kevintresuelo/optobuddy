@@ -29,13 +29,16 @@
     <string name="tools_contact_lens_spectacle_power">Spectacle power</string>
     <string name="tools_contact_lens_spectacle_optical_cross">Spectacle power optical cross</string>
     <string name="tools_contact_lens_cl_optical_cross">Contact lens power optical cross</string>
-    <string name="tools_contact_lens_spectacle_prescription">Spectacle &#8478;</string>
-    <string name="tools_contact_lens_cl_prescription">Contact lens &#8478;</string>
-    <string name="tools_contact_lens_effective_power">Effective power/Contact lens power</string>
+    <string name="tools_contact_lens_spectacle_prescription">Spectacle Rx</string>
+    <string name="tools_contact_lens_spherical_equivalent">Spherical equivalent</string>
+    <string name="tools_contact_lens_cl_prescription">Contact lens Rx</string>
+    <string name="tools_contact_lens_se_prescription">Spherical contact lens Rx</string>
+    <string name="tools_contact_lens_effective_power">Effective power computation</string>
     <string name="tools_contact_lens_sphere_title">Sphere</string>
     <string name="tools_contact_lens_cylinder_title">Cylinder</string>
     <string name="tools_contact_lens_axis_title">Axis</string>
-    <string name="tools_contact_lens_calculate">Compute Effective Power</string>
+    <string name="tools_contact_lens_calculate">Compute effective power</string>
+    <string name="tools_contact_lens_spherical_equivalent_calculate">Compute spherical equivalent</string>
     <string name="tools_contact_lens_error_msg_invalid_spec_sph">To continue with the computation, please provide a valid spectacle sphere power.</string>
 
     <string name="tools_accommodation">Accommodative tests</string>

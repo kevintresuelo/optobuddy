@@ -8,12 +8,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kevintresuelo.clinicus.ACCOMMODATION_SCREEN
 import com.kevintresuelo.clinicus.CONTACT_LENS_POWER_SCREEN
 import com.kevintresuelo.clinicus.ClinicusAppState
+import com.kevintresuelo.clinicus.components.ads.showInterstitial
 import com.kevintresuelo.clinicus.R.string as AppStrings
 
 @Composable
@@ -26,6 +28,8 @@ fun CatalogScreen(
     appState.systemUiController.setSystemBarsColor(
         color = MaterialTheme.colorScheme.background,
     )
+
+    val context = LocalContext.current
 
     appState.showTopAppBar(stringResource(id = AppStrings.app_name))
 
@@ -40,12 +44,16 @@ fun CatalogScreen(
         HelpCards(
             title = AppStrings.tools_contact_lens_title,
         ) {
-            navigate(CONTACT_LENS_POWER_SCREEN)
+            showInterstitial(context) {
+                navigate(CONTACT_LENS_POWER_SCREEN)
+            }
         }
         HelpCards(
             title = AppStrings.tools_accommodation_title,
         ) {
-            navigate(ACCOMMODATION_SCREEN)
+            showInterstitial(context) {
+                navigate(ACCOMMODATION_SCREEN)
+            }
         }
     }
 }

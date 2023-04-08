@@ -7,7 +7,8 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.kevintresuelo.clinicus.ui.theme.AppTheme
+import com.kevintresuelo.clinicus.components.ads.loadInterstitial
+import com.kevintresuelo.clinicus.components.ads.removeInterstitial
 import com.kevintresuelo.lorem.components.updates.UpdateHandler
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,6 +20,9 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        loadInterstitial(this)
+
         setContent {
             val windowSizeClass = calculateWindowSizeClass(this)
             val widthSizeClass = windowSizeClass.widthSizeClass
@@ -49,5 +53,10 @@ class MainActivity : ComponentActivity() {
                     }
                 }
         }
+    }
+
+    override fun onDestroy() {
+        removeInterstitial()
+        super.onDestroy()
     }
 }

@@ -17,8 +17,8 @@ android {
         applicationId "com.kevintresuelo.clinicus"
         minSdk 28
         targetSdk 33
-        versionCode 1000010000
-        versionName "0.1.0"
+        versionCode 1000010001
+        versionName "0.1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

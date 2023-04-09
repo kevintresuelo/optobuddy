@@ -13,6 +13,7 @@ import com.kevintresuelo.clinicus.components.snackbar.SnackbarManager
 import com.kevintresuelo.clinicus.components.snackbar.SnackbarMessage.Companion.toAction
 import com.kevintresuelo.clinicus.components.snackbar.SnackbarMessage.Companion.toActionText
 import com.kevintresuelo.clinicus.components.snackbar.SnackbarMessage.Companion.toMessage
+import com.kevintresuelo.clinicus.utils.billing.PurchaseHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -28,7 +29,8 @@ class ClinicusAppState(
     private val resources: Resources,
     coroutineScope: CoroutineScope,
     val topAppBarTitle: MutableState<String>,
-    val showTopAppBar: MutableState<Boolean>
+    val showTopAppBar: MutableState<Boolean>,
+    val purchaseHelper: PurchaseHelper
 ) {
     init {
         coroutineScope.launch {

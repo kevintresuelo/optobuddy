@@ -25,17 +25,18 @@ import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.kevintresuelo.clinicus.components.snackbar.SnackbarManager
 import com.kevintresuelo.clinicus.ui.theme.AppTheme
+import com.kevintresuelo.clinicus.utils.billing.PurchaseHelper
 import kotlinx.coroutines.CoroutineScope
 import com.kevintresuelo.clinicus.R.string as AppStrings
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
-fun ClinicusApp(activity: Activity, widthSizeClass: WindowWidthSizeClass, heightSizeClass: WindowHeightSizeClass) {
+fun ClinicusApp(activity: Activity, widthSizeClass: WindowWidthSizeClass, heightSizeClass: WindowHeightSizeClass, purchaseHelper: PurchaseHelper) {
     AppTheme {
         val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
         Surface(color = MaterialTheme.colorScheme.background) {
-            val appState = rememberAppState(activity, widthSizeClass, heightSizeClass)
+            val appState = rememberAppState(activity, widthSizeClass, heightSizeClass, purchaseHelper)
 
             var canPop by remember { mutableStateOf(false) }
 
@@ -85,6 +86,25 @@ fun ClinicusApp(activity: Activity, widthSizeClass: WindowWidthSizeClass, height
                             },
                             actions = {
                                 when (currentDestination?.route) {
+                                    CATALOG_SCREEN -> {
+                                        IconButton(onClick = {
+                                            topAppBarDropDownMenuExpanded = true
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Default.MoreVert,
+                                                contentDescription = "More"
+                                            )
+                                        }
+                                        DropdownMenu(expanded =
+                                        topAppBarDropDownMenuExpanded, onDismissRequest =
+                                        { topAppBarDropDownMenuExpanded = false }) {
+                                            DropdownMenuItem(
+                                                text = { Text(text = "Buy Pro") },
+                                                onClick = {
+                                                    appState.purchaseHelper.makePurchase()
+                                                })
+                                        }
+                                    }
                                     else -> {
 
                                     }
@@ -113,6 +133,7 @@ fun rememberAppState(
     activity: Activity,
     widthSizeClass: WindowWidthSizeClass,
     heightSizeClass: WindowHeightSizeClass,
+    purchaseHelper: PurchaseHelper,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     systemUiController: SystemUiController = rememberSystemUiController(),
     navController: NavHostController = rememberNavController(),
@@ -120,10 +141,10 @@ fun rememberAppState(
     resources: Resources = resources(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     topAppBarTitle: MutableState<String> = remember { mutableStateOf(resources.getString(AppStrings.app_name)) },
-    showTopAppBar: MutableState<Boolean> = remember { mutableStateOf(false) }
+    showTopAppBar: MutableState<Boolean> = remember { mutableStateOf(false) },
 ) =
-    remember(activity, widthSizeClass, heightSizeClass, snackbarHostState, systemUiController, navController, snackbarManager, resources, coroutineScope, topAppBarTitle, showTopAppBar) {
-        ClinicusAppState(activity, widthSizeClass, heightSizeClass, snackbarHostState, systemUiController, navController, snackbarManager, resources, coroutineScope, topAppBarTitle, showTopAppBar)
+    remember(activity, widthSizeClass, heightSizeClass, snackbarHostState, systemUiController, navController, snackbarManager, resources, coroutineScope, topAppBarTitle, showTopAppBar, purchaseHelper) {
+        ClinicusAppState(activity, widthSizeClass, heightSizeClass, snackbarHostState, systemUiController, navController, snackbarManager, resources, coroutineScope, topAppBarTitle, showTopAppBar, purchaseHelper)
     }
 
 @Composable

@@ -9,6 +9,7 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.kevintresuelo.clinicus.components.ads.loadInterstitial
 import com.kevintresuelo.clinicus.components.ads.removeInterstitial
+import com.kevintresuelo.clinicus.utils.billing.PurchaseHelper
 import com.kevintresuelo.lorem.components.updates.UpdateHandler
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,7 +28,9 @@ class MainActivity : ComponentActivity() {
             val windowSizeClass = calculateWindowSizeClass(this)
             val widthSizeClass = windowSizeClass.widthSizeClass
             val heightSizeClass = windowSizeClass.heightSizeClass
-            ClinicusApp(this, widthSizeClass, heightSizeClass)
+            val purchaseHelper = PurchaseHelper(this)
+            purchaseHelper.billingSetup()
+            ClinicusApp(this, widthSizeClass, heightSizeClass, purchaseHelper)
         }
 
         updateHandler = UpdateHandler(this)
